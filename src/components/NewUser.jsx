@@ -1,31 +1,33 @@
-import React, { useState } from 'react'
+import { useState } from 'react';
+import useUsersContext from '../hooks/useUsersContext';
 
-const NewUser = ({handleAddNewUser}) => {
-    const [user, setuser] = useState("");
+const NewUser = () => {
+    const [userName, setuserName] = useState("");
+    const { setUsers } = useUsersContext();
+
     const handleAddUser = (event) => {
-        setuser(event.target.value);
+        setuserName(event.target.value);
     }
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const newUser = {
             id: new Date().getTime().toString(),
-            name: user
-        }
-
-        handleAddNewUser(newUser);
-        setuser("");
+            name: userName
+        };
+        setUsers((prevUsers) => [...prevUsers, newUser]);
+        setuserName("");
     }
 
   return (
     <>
         <h2>User Registration</h2>
         <form onSubmit={handleSubmit}>
-            <input type="text" name="user" value={user} onChange={handleAddUser} required/>
+            <input type="text" name="user" value={userName} onChange={handleAddUser} required/>
             <button type='submit'>Add User</button>
         </form>
     </>
   )
 }
 
-export default NewUser
+export default NewUser;
